@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sorting Visualizer</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f0f8ff;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      color: #4682b4;
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      padding: 8px 16px;
+      background-color: #4682b4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #5f9ea0;
+    }
+
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    #array-container {
+      display: flex;
+      gap: 20px;
+      margin: 50px 0;
+      align-items: flex-end;
+      min-height: 250px;
+      position: relative;
+    }
+
+    .box-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .box {
+      width: 60px;
+      height: 60px;
+      background-color: white;
+      border: 3px solid #87ceeb;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #4682b4;
+      font-size: 18px;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+
+    .highlight {
+      transform: translateY(-10px);
+      border-color: #ffa500;
+      box-shadow: 0 0 10px #ffa500;
+    }
+
+    .sorted {
+      background-color: #d4edda;
+      border-color: #28a745;
+    }
+
+    #message {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #e6f7ff;
+      border-radius: 4px;
+      color: #4682b4;
+      min-height: 20px;
+      text-align: center;
+      width: 80%;
+      max-width: 600px;
+      font-weight: bold;
+    }
+
+    /* Arc animations */
+    @keyframes arc-up {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(40px, -60px); }
+      100% { transform: translate(80px, 0); }
+    }
+
+    @keyframes arc-down {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(-40px, 60px); }
+      100% { transform: translate(-80px, 0); }
+    }
+
+    .arc-up {
+      animation: arc-up 0.6s ease forwards;
+      z-index: 10;
+    }
+
+    .arc-down {
+      animation: arc-down 0.6s ease forwards;
+      z-index: 9;
+    }
+
+    .arrow-up, .arrow-down {
+      position: absolute;
+      width: 60px;
+      height: 40px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .arrow-up {
+      top: -45px;
+    }
+
+    .arrow-down {
+      bottom: -45px;
+    }
+
+    .arrow-up svg, .arrow-down svg {
+      width: 100%;
+      height: 100%;
+      fill: #4682b4;
+    }
+
+    .arrow-up.show, .arrow-down.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sorting Algorithm Visualizer</h1>
+
+  <div class="controls">
+    <button onclick="generateArray()">Generate Random Array</button>
+    <button onclick="bubbleSort()">Bubble Sort</button>
+    <button onclick="togglePause()" id="pauseBtn" disabled>Pause</button>
+    <button onclick="killSort()" id="killBtn" disabled>Kill</button>
+  </div>
+
+  <div id="array-container"></div>
+
+  <div id="message"></div>
+
+  <!-- SVG arrows -->
+  <svg style="display: none;">
+    <symbol id="curve-arrow-right" viewBox="0 0 100 50">
+      <path d="M10,40 Q50,10 90,40" stroke="#4682b4" stroke-width="3" fill="none" />
+      <polygon points="90,40 80,35 80,45" fill="#4682b4" />
+    </symbol>
+    <symbol id="curve-arrow-left" viewBox="0 0 100 50">
+      <path d="M90,10 Q50,40 10,10" stroke="#4682b4" stroke-width="3" fill="none" />
+      <polygon points="10,10 20,5 20,15" fill="#4682b4" />
+    </symbol>
+  </svg>
+
+  <script>
+    let array = [];
+    let isSorting = false;
+    let pauseRequested = false;
+    let killRequested = false;
+
+    function generateArray(size = 8) {
+      if (isSorting) return;
+      array = [];
+      for (let i = 0; i < size; i++) {
+        array.push(Math.floor(Math.random() * 99) + 1);
+      }
+      drawArray();
+      showMessage("New array generated!");
+    }
+
+    function drawArray() {
+      const container = document.getElementById("array-container");
+      container.innerHTML = "";
+
+      for (let i = 0; i < array.length; i++) {
+        const boxWrapper = document.createElement("div");
+        boxWrapper.className = "box-wrapper";
+
+        const arrowUp = document.createElement("div");
+        arrowUp.className = "arrow-up";
+        arrowUp.innerHTML = `<svg><use xlink:href="#curve-arrow-right"></use></svg>`;
+
+        const box = document.createElement("div");
+        box.className = "box";
+        box.textContent = array[i];
+        box.setAttribute("data-index", i);
+
+        const arrowDown = document.createElement("div");
+        arrowDown.className = "arrow-down";
+        arrowDown.innerHTML = `<svg><use xlink:href="#curve-arrow-left"></use></svg>`;
+
+        boxWrapper.appendChild(arrowUp);
+        boxWrapper.appendChild(box);
+        boxWrapper.appendChild(arrowDown);
+        container.appendChild(boxWrapper);
+      }
+    }
+
+    function showMessage(msg) {
+      document.getElementById("message").textContent = msg;
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function bubbleSort() {
+      if (isSorting) return;
+      isSorting = true;
+      killRequested = false;
+      document.getElementById("pauseBtn").disabled = false;
+      document.getElementById("killBtn").disabled = false;
+
+      const container = document.getElementById("array-container");
+      let boxWrappers = Array.from(container.children);
+
+      for (let i = 0; i < array.length; i++) {
+        for (let j = 0; j < array.length - i - 1; j++) {
+
+          if (killRequested) {
+            resetButtons();
+            return;
+          }
+
+          const leftBox = boxWrappers[j].querySelector('.box');
+          const rightBox = boxWrappers[j+1].querySelector('.box');
+
+          leftBox.classList.add("highlight");
+          rightBox.classList.add("highlight");
+
+          await handlePause();
+
+          if (array[j] > array[j+1]) {
+            showMessage(`${array[j]} > ${array[j+1]} : swap`);
+
+            // show arrows
+            boxWrappers[j].querySelector(".arrow-up").classList.add("show");
+            boxWrappers[j+1].querySelector(".arrow-down").classList.add("show");
+
+            boxWrappers[j].classList.add("arc-up");
+            boxWrappers[j+1].classList.add("arc-down");
+
+            await sleep(600);
+
+            boxWrappers[j].classList.remove("arc-up");
+            boxWrappers[j+1].classList.remove("arc-down");
+
+            boxWrappers[j].querySelector(".arrow-up").classList.remove("show");
+            boxWrappers[j+1].querySelector(".arrow-down").classList.remove("show");
+
+            [array[j], array[j+1]] = [array[j+1], array[j]];
+            container.insertBefore(boxWrappers[j+1], boxWrappers[j]);
+
+            await sleep(300);
+
+          } else {
+            showMessage(`${array[j]} < ${array[j+1]} : no swapping`);
+            await sleep(600);
+          }
+
+          leftBox.classList.remove("highlight");
+          rightBox.classList.remove("highlight");
+
+          boxWrappers = Array.from(container.children);
+        }
+
+        boxWrappers[array.length - i - 1].querySelector('.box').classList.add("sorted");
+      }
+
+      showMessage("Sorting complete!");
+      resetButtons();
+    }
+
+    async function handlePause() {
+      while (pauseRequested) {
+        await sleep(100);
+      }
+    }
+
+    function togglePause() {
+      pauseRequested = !pauseRequested;
+      document.getElementById("pauseBtn").textContent = pauseRequested ? "Continue" : "Pause";
+    }
+
+    function killSort() {
+      killRequested = true;
+      showMessage("Sorting killed. Resetting...");
+      setTimeout(() => {
+        generateArray();
+      }, 500);
+    }
+
+    function resetButtons() {
+      isSorting = false;
+      pauseRequested = false;
+      document.getElementById("pauseBtn").textContent = "Pause";
+      document.getElementById("pauseBtn").disabled = true;
+      document.getElementById("killBtn").disabled = true;
+    }
+
+    generateArray();
+  </script>
+</body>
+</html>
