@@ -1,10 +1,20 @@
 import { renderBubbleSort } from "./algorithms/bubble.js";
+import { renderSelectionSort } from "./algorithms/selection.js";
+import { renderInsertionSort } from "./algorithms/insertion.js";
 
 window.array = [];
 window.isSorting = false;
 window.pauseRequested = false;
 window.killRequested = false;
 window.animationSpeed = 300;
+
+const algorithms = {
+  bubble: renderBubbleSort,
+  selection: renderSelectionSort,
+  insertion: renderInsertionSort,
+};
+
+window.currentAlgorithm = "bubble";
 
 function generateArray(size = 8) {
   if (window.isSorting) return;
@@ -60,7 +70,9 @@ async function handlePause() {
 function togglePause() {
   window.pauseRequested = !window.pauseRequested;
   const btn = document.getElementById("pauseBtn");
-  btn.textContent = window.pauseRequested ? "▶ Continue" : "⏸ Pause";
+  if (btn) {
+    btn.textContent = window.pauseRequested ? "▶ Continue" : "⏸ Pause";
+  }
 }
 
 function killSort() {
@@ -94,13 +106,6 @@ window.togglePause = togglePause;
 window.killSort = killSort;
 window.resetButtons = resetButtons;
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("bubbleBtn").addEventListener("click", () => {
-    renderBubbleSort(document.getElementById("algo-container"));
-  });
-  // Load bubble sort by default
-  renderBubbleSort(document.getElementById("algo-container"));
-});
 window.copyCode = function (id) {
   const codeEl = document.getElementById(id);
   if (!codeEl) return;
@@ -139,3 +144,32 @@ window.useUserArray = function () {
   window.showMessage("✅ Custom array loaded!");
 };
 
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("bubbleBtn").addEventListener("click", () => {
+    switchAlgorithm("bubble");
+  });
+  document.getElementById("selectionBtn").addEventListener("click", () => {
+    switchAlgorithm("selection");
+  });
+  document.getElementById("insertionBtn").addEventListener("click", () => {
+    switchAlgorithm("insertion");
+  });
+
+  switchAlgorithm("bubble");
+});
+
+function switchAlgorithm(name) {
+  window.currentAlgorithm = name;
+
+  document.querySelectorAll(".algo-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+  const activeBtn = document.getElementById(name + "Btn");
+  if (activeBtn) activeBtn.classList.add("active");
+
+  const container = document.getElementById("algo-container");
+  if (container) container.innerHTML = "";
+
+  const renderFn = algorithms[name];
+  if (renderFn) renderFn(container);
+}

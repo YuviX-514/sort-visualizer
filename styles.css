@@ -364,6 +364,7 @@ h1 {
     justify-content: center;
   }
 }
+
 .visualization-section {
   display: flex;
   flex-direction: column;
@@ -413,3 +414,29 @@ h1 {
 .array-input button:hover {
   background: var(--primary-dark);
 }
+
+.box.current-index {
+  border: 3px solid #facc15; /* yellow border for current index */
+}
+
+.box.selected-min {
+  border: 3px solid #22c55e; /* green border for selected minimum */
+}
+.box.highlight-selected {
+  border-color: var(--warning);
+  background: #fffbe6;
+  transform: translateY(-10px);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+.box.sorted {
+  background-color: #c4f8d0;
+  border-color: #28c76f;
+  color: #000;
+}
+
+.box.swapped {
+  border: 2px solid red;
+  background-color: #ffdddd;
+}
+

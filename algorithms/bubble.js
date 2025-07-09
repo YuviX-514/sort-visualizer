@@ -1,77 +1,46 @@
 export function renderBubbleSort(container) {
   container.innerHTML = `
-  <div class="algo-description">
-    <h2>Bubble Sort</h2>
-    <p>Bubble sort is a simple sorting algorithm that repeatedly steps through the list, 
-    compares adjacent elements and swaps them if they are in the wrong order.</p>
-    
-    <div class="complexity">
-      <div class="complexity-item">
-        <span class="complexity-label">Worst-case:</span>
-        <span class="complexity-value">O(n²)</span>
-      </div>
-      <div class="complexity-item">
-        <span class="complexity-label">Average-case:</span>
-        <span class="complexity-value">O(n²)</span>
-      </div>
-      <div class="complexity-item">
-        <span class="complexity-label">Best-case:</span>
-        <span class="complexity-value">O(n)</span>
-      </div>
-      <div class="complexity-item">
-        <span class="complexity-label">Space:</span>
-        <span class="complexity-value">O(1)</span>
+    <div class="algo-description">
+      <h2>Bubble Sort</h2>
+      <p>Bubble sort repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order.</p>
+      <div class="complexity">
+        <div class="complexity-item"><span class="complexity-label">Worst-case:</span> O(n²)</div>
+        <div class="complexity-item"><span class="complexity-label">Average-case:</span> O(n²)</div>
+        <div class="complexity-item"><span class="complexity-label">Best-case:</span> O(n)</div>
+        <div class="complexity-item"><span class="complexity-label">Space:</span> O(1)</div>
       </div>
     </div>
-  </div>
-
-  <div class="visualization-section">
-    <div class="controls">
-      <button onclick="window.generateArray()">Generate Array</button>
-      <button onclick="window.startSort()">Start Sort</button>
-      <button id="pauseBtn" onclick="window.togglePause()" disabled>⏸ Pause</button>
-      <button id="killBtn" onclick="window.killSort()" disabled>Stop</button>
+    <div class="visualization-section">
+      <div class="controls">
+        <button onclick="window.generateArray()">Generate Array</button>
+        <button onclick="window.startSort()">Start Sort</button>
+        <button id="pauseBtn" onclick="window.togglePause()" disabled>⏸ Pause</button>
+        <button id="killBtn" onclick="window.killSort()" disabled>Stop</button>
+      </div>
+      <div id="array-container"></div>
+      <div id="message"></div>
     </div>
-    <div id="array-container"></div>
-    <div id="message"></div>
-  </div>
-
-  <div class="code-container">
-    <div class="code-header">
-      <span>Java Implementation</span>
-      <button class="copy-btn" onclick="window.copyCode('bubble-code')">
-        <svg viewBox="0 0 24 24" width="14" height="14">
-          <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"/>
-        </svg>
-        Copy Code
-      </button>
-    </div>
-    <pre class="code-snippet" id="bubble-code"><span class="keyword">public</span> <span class="keyword">class</span> <span class="function">BubbleSort</span> {
-  <span class="keyword">public static void</span> <span class="function">bubbleSort</span>(<span class="keyword">int</span>[] arr) {
+    <div class="code-container">
+      <div class="code-header">
+        <span>Java Implementation</span>
+        <button class="copy-btn" onclick="window.copyCode('bubble-code')">Copy Code</button>
+      </div>
+      <pre class="code-snippet" id="bubble-code"><span class="keyword">public</span> <span class="keyword">class</span> BubbleSort {
+  <span class="keyword">public static void</span> bubbleSort(<span class="keyword">int</span>[] arr) {
     <span class="keyword">int</span> n = arr.length;
-    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) {
-      <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n - i - <span class="number">1</span>; j++) {
-        <span class="keyword">if</span> (arr[j] &gt; arr[j + <span class="number">1</span>]) {
-          <span class="comment">// Swap arr[j] and arr[j + 1]</span>
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; n-1; i++) {
+      <span class="keyword">for</span> (<span class="keyword">int</span> j = 0; j &lt; n-i-1; j++) {
+        <span class="keyword">if</span> (arr[j] &gt; arr[j+1]) {
           <span class="keyword">int</span> temp = arr[j];
-          arr[j] = arr[j + <span class="number">1</span>];
-          arr[j + <span class="number">1</span>] = temp;
+          arr[j] = arr[j+1];
+          arr[j+1] = temp;
         }
       }
     }
   }
-
-  <span class="keyword">public static void</span> <span class="function">main</span>(<span class="keyword">String</span>[] args) {
-    <span class="keyword">int</span>[] data = {<span class="number">64</span>, <span class="number">34</span>, <span class="number">25</span>, <span class="number">12</span>, <span class="number">22</span>, <span class="number">11</span>, <span class="number">90</span>};
-    bubbleSort(data);
-    <span class="keyword">for</span> (<span class="keyword">int</span> num : data) {
-      System.out.print(num + <span class="string">" "</span>);
-    }
-  }
 }</pre>
-  </div>
-`;
-
+    </div>
+  `;
 
   window.generateArray();
   window.startSort = bubbleSort;
@@ -82,10 +51,8 @@ async function bubbleSort() {
   window.isSorting = true;
   window.killRequested = false;
 
-  const pauseBtn = document.getElementById("pauseBtn");
-  const killBtn = document.getElementById("killBtn");
-  pauseBtn.disabled = false;
-  killBtn.disabled = false;
+  document.getElementById("pauseBtn").disabled = false;
+  document.getElementById("killBtn").disabled = false;
 
   const container = document.getElementById("array-container");
   let boxes = Array.from(container.children);

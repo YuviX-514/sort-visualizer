@@ -19,13 +19,21 @@
         <span class="algo-icon">🫧</span>
         <span>Bubble Sort</span>
       </button>
+      <button id="selectionBtn" class="algo-btn">
+        <span class="algo-icon">🔎</span>
+        <span>Selection Sort</span>
+      </button>
+      <button id="insertionBtn" class="algo-btn">
+        <span class="algo-icon">📥</span>
+        <span>Insertion Sort</span>
+      </button>
     </div>
-    <div class="array-input">
-  <label for="userArray">Enter array elements (comma separated):</label>
-  <input type="text" id="userArray" placeholder="e.g. 5, 3, 7, 2">
-  <button onclick="window.useUserArray()">Use This Array</button>
-</div>
 
+    <div class="array-input">
+      <label for="userArray">Enter array elements (comma separated):</label>
+      <input type="text" id="userArray" placeholder="e.g. 5, 3, 7, 2">
+      <button onclick="window.useUserArray()">Use This Array</button>
+    </div>
 
     <div id="algo-container"></div>
 
@@ -43,5 +51,4 @@
 
   <script type="module" src="visualizer.js"></script>
 </body>
-
 </html>
