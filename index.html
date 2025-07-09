@@ -1,54 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Algorithm Visualizer</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-</head>
-<body>
-  <div class="app-container">
-    <header>
-      <h1>Algorithm Visualizer</h1>
-      <p class="subtitle">Interactive sorting algorithm visualization tool</p>
-    </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Algorithm Visualizer</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <header>
+        <h1>Algorithm Visualizer</h1>
+        <p class="subtitle">Interactive sorting algorithm visualization tool</p>
+      </header>
 
-    <div id="algo-menu" class="menu">
-      <button id="bubbleBtn" class="algo-btn active">
-        <span class="algo-icon">🫧</span>
-        <span>Bubble Sort</span>
-      </button>
-      <button id="selectionBtn" class="algo-btn">
-        <span class="algo-icon">🔎</span>
-        <span>Selection Sort</span>
-      </button>
-      <button id="insertionBtn" class="algo-btn">
-        <span class="algo-icon">📥</span>
-        <span>Insertion Sort</span>
-      </button>
+      <div id="algo-menu" class="menu">
+        <button id="bubbleBtn" class="algo-btn active">
+          <span class="algo-icon">🫧</span>
+          <span>Bubble Sort</span>
+        </button>
+        <button id="selectionBtn" class="algo-btn">
+          <span class="algo-icon">🔎</span>
+          <span>Selection Sort</span>
+        </button>
+        <button id="insertionBtn" class="algo-btn">
+          <span class="algo-icon">📥</span>
+          <span>Insertion Sort</span>
+        </button>
+        <button id="mergeBtn" class="algo-btn">
+          <span class="algo-icon">🪄</span>
+          <span>Merge Sort</span>
+        </button>
+        <button id="quickBtn" class="algo-btn">
+          <span class="algo-icon">⚡</span>
+          <span>Quick Sort</span>
+        </button>
+      </div>
+
+      <div class="array-input">
+        <label for="userArray">Enter array elements (comma separated):</label>
+        <input type="text" id="userArray" placeholder="e.g. 5, 3, 7, 2" />
+        <button onclick="window.useUserArray()">Use This Array</button>
+      </div>
+
+      <div id="algo-container"></div>
+
+      <svg style="display: none">
+        <symbol id="curve-arrow-right" viewBox="0 0 100 50">
+          <path
+            d="M10,40 Q50,10 90,40"
+            stroke="#3b82f6"
+            stroke-width="3"
+            fill="none"
+          />
+          <polygon points="90,40 80,35 80,45" fill="#3b82f6" />
+        </symbol>
+        <symbol id="curve-arrow-left" viewBox="0 0 100 50">
+          <path
+            d="M90,10 Q50,40 10,10"
+            stroke="#3b82f6"
+            stroke-width="3"
+            fill="none"
+          />
+          <polygon points="10,10 20,5 20,15" fill="#3b82f6" />
+        </symbol>
+      </svg>
     </div>
 
-    <div class="array-input">
-      <label for="userArray">Enter array elements (comma separated):</label>
-      <input type="text" id="userArray" placeholder="e.g. 5, 3, 7, 2">
-      <button onclick="window.useUserArray()">Use This Array</button>
-    </div>
-
-    <div id="algo-container"></div>
-
-    <svg style="display: none;">
-      <symbol id="curve-arrow-right" viewBox="0 0 100 50">
-        <path d="M10,40 Q50,10 90,40" stroke="#3b82f6" stroke-width="3" fill="none"/>
-        <polygon points="90,40 80,35 80,45" fill="#3b82f6"/>
-      </symbol>
-      <symbol id="curve-arrow-left" viewBox="0 0 100 50">
-        <path d="M90,10 Q50,40 10,10" stroke="#3b82f6" stroke-width="3" fill="none"/>
-        <polygon points="10,10 20,5 20,15" fill="#3b82f6"/>
-      </symbol>
-    </svg>
-  </div>
-
-  <script type="module" src="visualizer.js"></script>
-</body>
+    <script type="module" src="visualizer.js"></script>
+  </body>
 </html>

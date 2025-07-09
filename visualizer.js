@@ -1,6 +1,9 @@
 import { renderBubbleSort } from "./algorithms/bubble.js";
 import { renderSelectionSort } from "./algorithms/selection.js";
 import { renderInsertionSort } from "./algorithms/insertion.js";
+import { renderMergeSort } from "./algorithms/merge.js";
+import { renderQuickSort } from "./algorithms/quick.js";
+
 
 window.array = [];
 window.isSorting = false;
@@ -12,6 +15,8 @@ const algorithms = {
   bubble: renderBubbleSort,
   selection: renderSelectionSort,
   insertion: renderInsertionSort,
+  merge: renderMergeSort,
+  quick: renderQuickSort
 };
 
 window.currentAlgorithm = "bubble";
@@ -154,6 +159,12 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("insertionBtn").addEventListener("click", () => {
     switchAlgorithm("insertion");
   });
+  document.getElementById("mergeBtn").addEventListener("click", () => {
+  switchAlgorithm("merge");
+});
+document.getElementById("quickBtn").addEventListener("click", () => {
+  switchAlgorithm("quick");
+});
 
   switchAlgorithm("bubble");
 });
@@ -173,3 +184,9 @@ function switchAlgorithm(name) {
   const renderFn = algorithms[name];
   if (renderFn) renderFn(container);
 }
+window.copyCode = (id) => {
+  const codeElement = document.getElementById(id);
+  navigator.clipboard.writeText(codeElement.innerText).then(() => {
+    window.showMessage("✅ Code copied to clipboard!");
+  });
+};
