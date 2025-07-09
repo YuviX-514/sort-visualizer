@@ -440,3 +440,41 @@ h1 {
   background-color: #ffdddd;
 }
 
+/* Selection Sort specific styles */
+.box.current {
+  background-color: #bfdbfe;
+  border-color: #3b82f6;
+}
+
+.box.comparing {
+  background-color: #fef08a;
+  border-color: #f59e0b;
+}
+
+.box.min-candidate {
+  background-color: #bbf7d0;
+  border-color: #10b981;
+  transform: scale(1.05);
+}
+
+.box.swapping {
+  background-color: #fecaca;
+  border-color: #ef4444;
+}
+
+.box.sorted {
+  background-color: #dcfce7;
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.box {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease-in-out;
+}
+
+.box.swapping {
+  z-index: 10;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
